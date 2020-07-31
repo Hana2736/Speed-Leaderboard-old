@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="dev.stickbit.speed">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+        <activity android:name=".SeeLeaderboard">
+        </activity>
+        <activity android:name=".UploadResults">
+        </activity>
+        <activity
+                android:name=".DrivePage"
+                android:launchMode="singleInstance">
+        </activity>
+        <activity
+                android:name=".HomePage"
+                android:launchMode="singleTask">
+        </activity>
+        <activity android:name=".Register">
+        </activity>
+        <activity android:name=".StarterPage">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <service android:name=".DriveModeService"/>
+    </application>
+
+</manifest>

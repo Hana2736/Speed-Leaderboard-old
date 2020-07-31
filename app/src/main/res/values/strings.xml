@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Speed Leaderboard</string>
+    <string name="welcomeMessage">Welcome to
+        Speed Leaderboard. Please pick a username and choose a league to compete in.
+    </string>
+    <string name="username">Username</string>
+    <string name="league_name">League Name</string>
+    <string name="register">Register</string>
+    <string name="registerError">Names can only be alphanumeric (A–Z, 0–9) and underscores (_)</string>
+    <string name="genericError">Something went really wrong! Error: %%</string>
+    <string name="registerLoad">Hang on, registering you…</string>
+    <string name="networkError">Trouble communicating with the server! Error: %%</string>
+    <string name="registered">Successfully registered. Hang on…</string>
+    <string name="nameInUse">The username you chose is already taken in this league.</string>
+    <string name="loader">Starting app, please wait…</string>
+    <string name="wb">
+        Hey there, %%!\n\nYou\&#39;re competing in the $$ league.
+    </string>
+    <string name="loggingIn">Reading data, hang on just a moment…</string>
+    <string name="driveButtonLabel">Let\'s drive!</string>
+    <string name="leaderboardButtonLabel">Look at leaderboards</string>
+    <string name="stopDriveButtonWarn">Please choose the \"Save results and exit\" button instead.</string>
+    <string name="locationPermissionRequired">The app needs location access to get your street and speed.</string>
+    <string name="bgLocationPermission">The app needs location at all times so it can work while you have other apps
+        open.
+    </string>
+    <string name="grantButton">Allow</string>
+    <string name="bgService">Speed Leaderboard Driving Mode</string>
+    <string name="bgServiceTxt">You\'re currently in the competition! Drive safe!\nTap to return to the app.\nResults
+        won\'t be saved unless you stop the drive in-app.
+    </string>
+    <string name="newRecord">New Personal Record!</string>
+    <string name="newRecordText">You set a new highest speed of %%MPH on\n!!!</string>
+    <string name="backgroundCrash">The service was stopped because you or your system closed the app.\nAny unsubmitted
+        records were lost.
+    </string>
+    <string name="bgBannerCrash">Service stopped!</string>
+    <string name="useNotif">Please use the notification to return to Driving Mode.</string>
+    <string name="loadingDrive">Preparing Driving Mode…</string>
+    <string name="locPending">Fetching location…</string>
+    <string name="roadsDiscovered">Roads discovered this session: 0</string>
+    <string name="speedMenu">Your speed: $$MPH</string>
+    <string name="stopDriving">Save results and exit</string>
+    <string name="uploading">Your records are being processed…\nPlease stay on this page.</string>
+    <string name="bgCat">Background Service</string>
+    <string name="recordCat">Personal Best</string>
+    <string name="defeatCat">Record Defeated</string>
+    <string name="crashCat">Driving Mode Errors</string>
+    <string name="newRoadCat">New Road Discoveries</string>
+    <string name="newRoadHeader">New Road Discovered!</string>
+    <string name="newRoadTxt">You just discovered $$.</string>
+    <string name="notSetTxt">Notification Settings</string>
+    <string name="title_activity_leaderboard_page">LeaderboardPage</string>
+    <string name="uploadETA">About &lt;Calculating&gt; seconds remaining</string>
+    <string name="corruptServerMsg">Received corrupt data from the server!</string>
+    <string name="allData">See all results</string>
+</resources>
