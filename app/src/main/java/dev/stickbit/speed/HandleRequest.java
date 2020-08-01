@@ -21,7 +21,9 @@ public class HandleRequest {
         if (mode.equals("pullAll")) {
             TextView t = new TextView(a);
             t.setText(R.string.loggingIn);
-            ((LinearLayout) a.findViewById(R.id.resultLayout)).addView(t);
+            LinearLayout l = ((LinearLayout) a.findViewById(R.id.resultLayout));
+            l.removeAllViews();
+            l.addView(t);
         }
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -54,7 +56,7 @@ public class HandleRequest {
                                 break;
                             }
                             case "pullAll": {
-                                h.pullAllResults(a, response);
+                                h.pullAllResults(a, response, (Integer) extra);
                                 break;
                             }
                         }
@@ -72,39 +74,55 @@ public class HandleRequest {
         SortedSet<String> keys = new TreeSet<>(records.keySet());
         for (String street : keys) {
             for (String user : records.get(street).keySet()) {
-                addTrash(s, user, records, l, street);
+                addTrash(s, user, records, l, street, records.get(street).get(user));
             }
         }
     }
 
-   /* static void sortByName(Map<String, Map<String, Integer>> records,Activity s, LinearLayout l) {
-        List<Map<String, Object>> list = new ArrayList<>();
+    static void sortBySpeed(Map<String, Map<String, Integer>> records, Activity s, LinearLayout l) {
+        List<Integer[]> speed = new ArrayList<>();
+        List<String[]> res = new ArrayList<>();
+        int i = 0;
         for (String street : records.keySet()) {
-            for (String name : records.get(street).keySet()) {
-                Map<String, Object> m = new HashMap<>();
-                m.put(name, new Object[]{street, records.get(street).get(name)});
-                list.add(m);
+            for (String user : records.get(street).keySet()) {
+                speed.add(new Integer[]{records.get(street).get(user), i++});
+                res.add(new String[]{street, user});
             }
         }
-        String currentName = "  ";
-        for (int i = 0, listSize = list.size(); i < listSize; i++) {
-            Map<String, Object> map = list.get(i);
-            boolean found = false;
-            for (Map<String, Object> map2 : list) {
-                if (map2.containsKey(currentName)) {
-                    found = true;
-                    break;
+        Collections.sort(speed, new Comparator<Integer[]>() {
+            public int compare(Integer[] ints, Integer[] otherInts) {
+                return otherInts[0].compareTo(ints[0]);
+            }
+        });
+        for (Integer[] sp : speed) {
+            addTrash(s, res.get(sp[1])[1], records, l, res.get(sp[1])[0], sp[0]);
+        }
+    }
+
+    static void sortByName(Map<String, Map<String, Integer>> records, Activity s, LinearLayout l) {
+        Map<String, Integer> counts = new HashMap<>();
+        for (String street : records.keySet()) {
+            for (String user : records.get(street).keySet()) {
+                counts.put(user, ((counts.get(user) != null) ? counts.get(user) + 1 : 1));
+            }
+        }
+        for (int i = 0; i < counts.keySet().size(); i++) {
+            for (int j = 0; j < counts.get(counts.keySet().toArray()[i]); j++) {
+                for (String street : records.keySet()) {
+                    for (String user : records.get(street).keySet()) {
+                        if (user.equals(counts.keySet().toArray()[i])) {
+                            addTrash(s, user, records, l, street, records.get(street).get(user));
+                            counts.put(user, counts.get(user) - 1);
+                        }
+                    }
                 }
             }
-            if (found){
-                addTrash(s, currentName, records, l, );
-            }
         }
-    }*/
+    }
 
-    static void addTrash(Activity s, String name, Map<String, Map<String, Integer>> records, LinearLayout l, String street) {
+    static void addTrash(Activity s, String name, Map<String, Map<String, Integer>> records, LinearLayout l, String street, int speed) {
         TextView t = new TextView(s);
-        t.setText(name + ": " + records.get(street).get(name) + " on " + street.substring(0, street.lastIndexOf(",")));
+        t.setText(name + ": " + speed + " on " + street.substring(0, street.lastIndexOf(",")));
         l.addView(t);
         t = new TextView(s);
         t.setText(" ");
@@ -171,7 +189,9 @@ public class HandleRequest {
             resP.startTime = System.currentTimeMillis();
         }
 
-        public void pullAllResults(Activity s, String reply) {
+        public void pullAllResults(Activity s, String reply, int mode) {
+            LinearLayout l = s.findViewById(R.id.resultLayout);
+            l.removeAllViews();
             System.out.println("we got here");
             Map<String, Map<String, Integer>> records = new HashMap<>();
 
@@ -196,11 +216,16 @@ public class HandleRequest {
                 }
                 records.put(rName, user);
             }
-            LinearLayout l = s.findViewById(R.id.resultLayout);
-            l.removeAllViews();
             System.out.println("wtf");
             //sortByName(records);
-            sortByStreet(records, s, l);
+            if (mode == 0)
+                sortByStreet(records, s, l);
+            if (mode == 1)
+                sortByName(records, s, l);
+            if (mode == 2)
+                sortBySpeed(records, s, l);
+
         }
     }
+
 }
