@@ -1,7 +1,6 @@
 package dev.stickbit.speed;
 
 import android.os.Bundle;
-import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SeeLeaderboard extends AppCompatActivity {
@@ -18,9 +17,8 @@ public class SeeLeaderboard extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_see_leaderboard);
+        HandleRequest.requestGeneric(this, StarterPage.ipAddr + "GETALLRESULTS~" + StarterPage.token + "~", "pullAll", null);
+
     }
 
-    public void button(View v) {
-        HandleRequest.requestGeneric(this, StarterPage.ipAddr + "GETALLRESULTS~" + StarterPage.token + "~", "pullAll", null);
-    }
 }

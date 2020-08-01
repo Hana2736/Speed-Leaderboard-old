@@ -7,21 +7,31 @@
         android:layout_height="match_parent"
         tools:context=".SeeLeaderboard">
 
-    <Button
-            android:text="@string/allData"
+    <TextView
+            android:text="@string/lBoardTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/button"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="24dp" android:onClick="button"/>
+            android:layout_height="wrap_content" android:id="@+id/leaderboardHeader"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="24dp"
+            android:layout_marginStart="24dp" android:layout_marginEnd="24dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" android:textAlignment="center"/>
     <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="24dp" app:layout_constraintTop_toBottomOf="@+id/button"
-            android:layout_marginTop="24dp" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:id="@+id/scrollPage"
-            android:layout_marginStart="24dp" android:layout_marginEnd="24dp">
+            android:layout_marginStart="24dp" android:layout_marginEnd="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/sortMode" android:layout_marginTop="24dp">
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                       android:orientation="vertical" android:id="@+id/resultLayout"/>
     </ScrollView>
+    <Spinner
+            android:layout_width="379dp"
+            android:layout_height="0dp" android:id="@+id/sortMode"
+            android:spinnerMode="dropdown" android:entries="@array/sortArray"
+            app:layout_constraintTop_toBottomOf="@+id/leaderboardHeader" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp" android:layout_marginTop="24dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

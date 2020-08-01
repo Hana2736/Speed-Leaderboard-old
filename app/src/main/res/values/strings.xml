@@ -54,4 +54,5 @@
     <string name="uploadETA">About &lt;Calculating&gt; seconds remaining</string>
     <string name="corruptServerMsg">Received corrupt data from the server!</string>
     <string name="allData">See all results</string>
+    <string name="lBoardTitle">Leaderboard</string>
 </resources>

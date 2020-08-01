@@ -124,6 +124,7 @@ public class DriveModeService extends Service {
                         dist = newL.distanceTo(last);
                         timeDiff = newL.getTime() - last.getTime();
                     } catch (Exception e) {
+                        //lol
                     }
 
                     isReady = false;
@@ -143,7 +144,7 @@ public class DriveModeService extends Service {
                     Geocoder c = new Geocoder(v);
                     Address a = c.getFromLocation(newL.getLatitude(), newL.getLongitude(), 1).get(0);
                     location = a.getThoroughfare() + ", " + a.getPostalCode() + ", " + a.getCountryName();
-                    location = location.replaceAll("null", "Data Not Provided");
+                    location = location.replaceAll("null", "N/A");
                     boolean toAdd = false;
                     boolean newR = false;
                     if (accurate) {

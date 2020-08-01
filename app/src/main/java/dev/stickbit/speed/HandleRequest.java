@@ -1,27 +1,22 @@
 package dev.stickbit.speed;
 
 import android.app.Activity;
-import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class HandleRequest {
     public static RequestQueue q = null;
+
     public static void requestGeneric(Activity a, String url, String mode, Object extra) {
         if (mode.equals("pullAll")) {
             TextView t = new TextView(a);
@@ -29,55 +24,91 @@ public class HandleRequest {
             ((LinearLayout) a.findViewById(R.id.resultLayout)).addView(t);
         }
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        response = StrVerify.checkString(response, a, url, mode);
-                        if (response == null) {
-                            requestGeneric(a, url, mode, extra);
-                            return;
-                        }
-                        try {
-                            netHelper h = new netHelper();
-                            switch (mode) {
-                                case "getRecords": {
-                                    h.getRecords(a, response, (HomePage) extra);
-                                    break;
-                                }
-                                case "getLeague": {
-                                    h.getLeague(response, (HomePage) extra);
-                                    break;
-                                }
-                                case "getName": {
-                                    h.getName(response, (HomePage) extra);
-                                    break;
-                                }
-                                case "register": {
-                                    h.register(response, a);
-                                    break;
-                                }
-                                case "setRecord": {
-                                    h.setRecord((UploadResults) extra);
-                                    break;
-                                }
-                                case "pullAll": {
-                                    h.pullAllResults(a, response);
-                                    break;
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                response -> {
+                    response = StrVerify.checkString(response, a, url, mode);
+                    if (response == null) {
+                        requestGeneric(a, url, mode, extra);
+                        return;
                     }
-
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Snackbar.make(a.getWindow().getDecorView().getRootView(), a.getText(R.string.networkError).toString().replace("%%", String.valueOf(error)), Snackbar.LENGTH_INDEFINITE).show();
-                error.printStackTrace();
-            }
+                    try {
+                        netHelper h = new netHelper();
+                        switch (mode) {
+                            case "getRecords": {
+                                h.getRecords(a, response, (HomePage) extra);
+                                break;
+                            }
+                            case "getLeague": {
+                                h.getLeague(response, (HomePage) extra);
+                                break;
+                            }
+                            case "getName": {
+                                h.getName(response, (HomePage) extra);
+                                break;
+                            }
+                            case "register": {
+                                h.register(response, a);
+                                break;
+                            }
+                            case "setRecord": {
+                                h.setRecord((UploadResults) extra);
+                                break;
+                            }
+                            case "pullAll": {
+                                h.pullAllResults(a, response);
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+            Snackbar.make(a.getWindow().getDecorView().getRootView(), a.getText(R.string.networkError).toString().replace("%%", String.valueOf(error)), Snackbar.LENGTH_INDEFINITE).show();
+            error.printStackTrace();
         });
         q.add(stringRequest);
+    }
+
+    static void sortByStreet(Map<String, Map<String, Integer>> records, Activity s, LinearLayout l) {
+        SortedSet<String> keys = new TreeSet<>(records.keySet());
+        for (String street : keys) {
+            for (String user : records.get(street).keySet()) {
+                addTrash(s, user, records, l, street);
+            }
+        }
+    }
+
+   /* static void sortByName(Map<String, Map<String, Integer>> records,Activity s, LinearLayout l) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (String street : records.keySet()) {
+            for (String name : records.get(street).keySet()) {
+                Map<String, Object> m = new HashMap<>();
+                m.put(name, new Object[]{street, records.get(street).get(name)});
+                list.add(m);
+            }
+        }
+        String currentName = "  ";
+        for (int i = 0, listSize = list.size(); i < listSize; i++) {
+            Map<String, Object> map = list.get(i);
+            boolean found = false;
+            for (Map<String, Object> map2 : list) {
+                if (map2.containsKey(currentName)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found){
+                addTrash(s, currentName, records, l, );
+            }
+        }
+    }*/
+
+    static void addTrash(Activity s, String name, Map<String, Map<String, Integer>> records, LinearLayout l, String street) {
+        TextView t = new TextView(s);
+        t.setText(name + ": " + records.get(street).get(name) + " on " + street.substring(0, street.lastIndexOf(",")));
+        l.addView(t);
+        t = new TextView(s);
+        t.setText(" ");
+        l.addView(t);
     }
 
     private static class netHelper {
@@ -141,6 +172,7 @@ public class HandleRequest {
         }
 
         public void pullAllResults(Activity s, String reply) {
+            System.out.println("we got here");
             Map<String, Map<String, Integer>> records = new HashMap<>();
 
             String[] splitRoadBad = reply.split("STARTROAD:");
@@ -150,15 +182,15 @@ public class HandleRequest {
             }
             System.out.println(Arrays.toString(splitRoadBad));
             System.out.println(Arrays.toString(splitRoad));
-            for (int i = 0; i < splitRoad.length; i++) {
-                String rName = splitRoad[i].substring(0, splitRoad[i].indexOf("::ENDROAD"));
+            for (String value : splitRoad) {
+                String rName = value.substring(0, value.indexOf("::ENDROAD"));
                 System.out.println("ROad name is " + rName);
-                String rest = splitRoad[i].substring(splitRoad[i].indexOf("::ENDROAD") + "::ENDROAD".length());
+                String rest = value.substring(value.indexOf("::ENDROAD") + "::ENDROAD".length());
                 Map<String, Integer> user = new HashMap<>();
                 String[] uSplit = rest.split(";;");
-                for (int j = 0; j < uSplit.length; j++) {
-                    if (uSplit[j].contains(":::")) {
-                        String[] split = uSplit[j].split(":::");
+                for (String item : uSplit) {
+                    if (item.contains(":::")) {
+                        String[] split = item.split(":::");
                         user.put(split[0], Integer.parseInt(split[1]));
                     }
                 }
@@ -166,16 +198,9 @@ public class HandleRequest {
             }
             LinearLayout l = s.findViewById(R.id.resultLayout);
             l.removeAllViews();
-            for (String street : records.keySet()) {
-                for (String name : records.get(street).keySet()) {
-                    TextView t = new TextView(s);
-                    t.setText(name + ": " + records.get(street).get(name) + " on " + street);
-                    l.addView(t);
-                    t = new TextView(s);
-                    t.setText(" ");
-                    l.addView(t);
-                }
-            }
+            System.out.println("wtf");
+            //sortByName(records);
+            sortByStreet(records, s, l);
         }
     }
 }
