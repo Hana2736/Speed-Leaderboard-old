@@ -16,14 +16,13 @@ import java.util.*;
 
 public class HandleRequest {
     public static RequestQueue q = null;
-
+    static Snackbar s = null;
     public static void requestGeneric(Activity a, String url, String mode, Object extra) {
         if (mode.equals("pullAll")) {
-            TextView t = new TextView(a);
-            t.setText(R.string.loggingIn);
-            LinearLayout l = ((LinearLayout) a.findViewById(R.id.resultLayout));
+            s = Snackbar.make(a.findViewById(R.id.leaderboardHeader).getRootView(), R.string.loggingIn, Snackbar.LENGTH_INDEFINITE);
+            s.show();
+            LinearLayout l = a.findViewById(R.id.resultLayout);
             l.removeAllViews();
-            l.addView(t);
         }
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -130,6 +129,7 @@ public class HandleRequest {
     }
 
     private static class netHelper {
+        public Snackbar sn = s;
         public void getRecords(Activity a, String res, HomePage h) {
             HomePage.records = new HashMap<>();
             String[] split = res.split("\n");
@@ -224,7 +224,7 @@ public class HandleRequest {
                 sortByName(records, s, l);
             if (mode == 2)
                 sortBySpeed(records, s, l);
-
+            sn.dismiss();
         }
     }
 

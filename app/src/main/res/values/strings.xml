@@ -1,20 +1,20 @@
 <resources>
     <string name="app_name">Speed Leaderboard</string>
     <string name="welcomeMessage">Welcome to
-        Speed Leaderboard. Please pick a username and choose a league to compete in.
+        Speed Leaderboard. Please pick a username and choose a group to compete in.
     </string>
     <string name="username">Username</string>
-    <string name="league_name">League Name</string>
+    <string name="league_name">Group Name</string>
     <string name="register">Register</string>
     <string name="registerError">Names can only be alphanumeric (A–Z, 0–9) and underscores (_)</string>
     <string name="genericError">Something went really wrong! Error: %%</string>
     <string name="registerLoad">Hang on, registering you…</string>
     <string name="networkError">Trouble communicating with the server! Error: %%</string>
     <string name="registered">Successfully registered. Hang on…</string>
-    <string name="nameInUse">The username you chose is already taken in this league.</string>
+    <string name="nameInUse">The username you chose is already taken in this group.</string>
     <string name="loader">Starting app, please wait…</string>
     <string name="wb">
-        Hey there, %%!\n\nYou\&#39;re competing in the $$ league.
+        Hey there, %%!\n\nYou\&#39;re competing in the $$ group.
     </string>
     <string name="loggingIn">Reading data, hang on just a moment…</string>
     <string name="driveButtonLabel">Let\'s drive!</string>
@@ -38,7 +38,7 @@
     <string name="useNotif">Please use the notification to return to Driving Mode.</string>
     <string name="loadingDrive">Preparing Driving Mode…</string>
     <string name="locPending">Fetching location…</string>
-    <string name="roadsDiscovered">Roads discovered this session: 0</string>
+    <string name="roadsDiscovered">New records this session: 0</string>
     <string name="speedMenu">Your speed: $$MPH</string>
     <string name="stopDriving">Save results and exit</string>
     <string name="uploading">Your records are being processed…\nPlease stay on this page.</string>
@@ -55,4 +55,5 @@
     <string name="corruptServerMsg">Received corrupt data from the server!</string>
     <string name="allData">See all results</string>
     <string name="lBoardTitle">Leaderboard</string>
+    <string name="saved">Saved records!</string>
 </resources>

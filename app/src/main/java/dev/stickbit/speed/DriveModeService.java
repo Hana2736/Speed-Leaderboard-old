@@ -154,12 +154,12 @@ public class DriveModeService extends Service {
                             }
                         } else {
                             toAdd = true;
-                            roadsDiscovered++;
                             newR = true;
                         }
                     }
                     if (toAdd) {
                         HomePage.records.put(location, speed);
+                        roadsDiscovered++;
                         Notification notification =
                                 new Notification.Builder(v, newR ? "newRoad" : "pb")
                                         .setContentTitle(newR ? getText(R.string.newRoadHeader) : getText(R.string.newRecord))

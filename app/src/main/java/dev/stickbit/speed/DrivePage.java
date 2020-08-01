@@ -37,11 +37,6 @@ public class DrivePage extends AppCompatActivity {
             s.setAction(R.string.grantButton, new askPermClickListen(0));
             s.show();
             ready = false;
-        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            Snackbar s = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.bgLocationPermission, Snackbar.LENGTH_INDEFINITE);
-            s.setAction(R.string.grantButton, new askPermClickListen(1));
-            s.show();
-            ready = false;
         }
         if (ready) {
             stopService(new Intent(this, DriveModeService.class));
@@ -52,6 +47,8 @@ public class DrivePage extends AppCompatActivity {
     }
 
     public void stopButton(View w) {
+
+
         doneWithIt = true;
         s.kill();
         DriveModeService.v = null;
@@ -115,7 +112,7 @@ public class DrivePage extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            requestPermissions(new String[]{perm == 0 ? Manifest.permission.ACCESS_FINE_LOCATION : Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1000);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, (int) (Math.random()*99999));
         }
     }
 }

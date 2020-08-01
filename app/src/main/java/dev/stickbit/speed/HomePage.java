@@ -6,6 +6,7 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Map;
 
@@ -15,6 +16,8 @@ public class HomePage extends AppCompatActivity {
     public static String name;
     public static String league;
     int ready = 0;
+    public static boolean showSaveMessage = false;
+
 
     public void ready() {
         ready++;
@@ -45,7 +48,10 @@ public class HomePage extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-
+        if (showSaveMessage) {
+            showSaveMessage = false;
+            Snackbar.make(findViewById(R.id.wbMessage).getRootView(), R.string.saved, Snackbar.LENGTH_SHORT).show();
+        }
         HandleRequest.requestGeneric(this, StarterPage.ipAddr + "GETNAME~" + StarterPage.token + "~", "getName", this);
         HandleRequest.requestGeneric(this, StarterPage.ipAddr + "GETRECORDS~" + StarterPage.token + "~", "getRecords", this);
         HandleRequest.requestGeneric(this, StarterPage.ipAddr + "GETLEAGUE~" + StarterPage.token + "~", "getLeague", this);
