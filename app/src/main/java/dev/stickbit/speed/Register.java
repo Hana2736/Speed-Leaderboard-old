@@ -13,6 +13,7 @@ public class Register extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }

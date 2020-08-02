@@ -1,6 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight"/>
-
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:windowBackground">@color/bg</item>
+    </style>
 </resources>

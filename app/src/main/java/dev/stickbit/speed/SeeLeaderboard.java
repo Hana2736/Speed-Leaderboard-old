@@ -16,6 +16,7 @@ public class SeeLeaderboard extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         Activity a = this;
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
