@@ -11,6 +11,7 @@ public class SeeLeaderboard extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        HomePage.showSaveMessage = null;
         StarterPage.changeActivities(this, StarterPage.class);
     }
 

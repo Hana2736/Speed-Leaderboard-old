@@ -10,6 +10,9 @@ import android.os.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
+import org.osmdroid.views.overlay.Marker;
+
+import java.util.LinkedList;
 
 public class DriveModeService extends Service {
     public static int speed;
@@ -25,6 +28,11 @@ public class DriveModeService extends Service {
     private Looper serviceLooper;
     private ServiceHandler serviceHandler;
     private Location last;
+    public double lastLat;
+    public double lastLongi;
+    Location lastPnt;
+    boolean hasPlacedBeginPoint;
+    Marker lastmarker;
 
     public void kill() {
         stopForeground(true);
@@ -59,7 +67,7 @@ public class DriveModeService extends Service {
         Notification notification =
                 new Notification.Builder(this, "Background")
                         .setContentTitle(getText(R.string.bgService))
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setSmallIcon(R.mipmap.ic_launcher_foreground)
                         .setContentIntent(pendingIntent)
                         .setStyle(new Notification.BigTextStyle().bigText(getText(R.string.bgServiceTxt)))
                         .build();
@@ -101,7 +109,7 @@ public class DriveModeService extends Service {
                 if (kill)
                     return;
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     l.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, t);
                     if (last == null) {
                         last = l.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -110,7 +118,7 @@ public class DriveModeService extends Service {
                         Notification notification =
                                 new Notification.Builder(v, "crash")
                                         .setContentTitle(getText(R.string.bgBannerCrash))
-                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                        .setSmallIcon(R.mipmap.ic_launcher_foreground)
                                         .setStyle(new Notification.BigTextStyle().bigText(getText(R.string.backgroundCrash)))
                                         .build();
                         NotificationManagerCompat.from(v).notify(25601440, notification);
@@ -138,8 +146,13 @@ public class DriveModeService extends Service {
                     speedCalc /= 1000d;
                     //mph
                     speedCalc *= 0.621371192;
+
+
                     speed = (int) speedCalc;
-                    boolean accurate = last.getAccuracy() < 30 && newL.getAccuracy() < 30;
+                    if(speed > 300){
+                        speed =0;
+                    }
+                    boolean accurate = last.getAccuracy() < 25 && newL.getAccuracy() < 25;
                     last = newL;
                     Geocoder c = new Geocoder(v);
                     Address a = c.getFromLocation(newL.getLatitude(), newL.getLongitude(), 1).get(0);
@@ -148,6 +161,62 @@ public class DriveModeService extends Service {
                     boolean toAdd = false;
                     boolean newR = false;
                     if (accurate) {
+                        if (DrivePage.creatRoute) {
+                            if(DrivePage.longs == null){
+                                DrivePage.longs = new LinkedList<>();
+                                DrivePage.lats = new LinkedList<>();
+                            }
+                            double lastPntDist;
+                            if (lastPnt == null) {
+                                lastPntDist = 99999999;
+                            } else {
+                                lastPntDist = Math.abs(newL.distanceTo(lastPnt));
+                            }
+                            if (lastPntDist > 155) {
+                                lastPnt = new Location("");
+                                lastPnt.setLatitude(newL.getLatitude());
+                                lastPnt.setLongitude(newL.getLongitude());
+                                DrivePage.lats.add(newL.getLatitude());
+                                DrivePage.longs.add(newL.getLongitude());
+                                if (lastmarker != null && DrivePage.lats.size() >= 3) {
+                                    lastmarker.setIcon(v.getDrawable(R.drawable.future_point));
+                                }
+                                lastmarker = v.addMarker(newL.getLatitude(), newL.getLongitude(), DrivePage.m, hasPlacedBeginPoint ? 3 : 1);
+                                if (!hasPlacedBeginPoint) {
+                                    hasPlacedBeginPoint = true;
+                                }
+
+                            }
+
+                        }
+                        System.out.println("hello?");
+                        lastLat = newL.getLatitude();
+                        lastLongi = newL.getLongitude();
+                        if (DrivePage.tTrialToLoad != null) {
+                            Marker m = (Marker) DrivePage.remainingMarkers.peek()[0];
+                            int type = (int) DrivePage.remainingMarkers.peek()[1];
+                            Location loc = new Location("");
+                            loc.setLatitude(m.getPosition().getLatitude());
+                            loc.setLongitude(m.getPosition().getLongitude());
+                            double distBtwn = Math.abs(loc.distanceTo(newL));
+                            System.out.println("Distance is " + distBtwn);
+                            if (distBtwn < 40) {
+                                DrivePage.removeMarker((Marker) DrivePage.remainingMarkers.remove()[0], DrivePage.m);
+                                if (type == 1) {
+                                    DrivePage.startTimer();
+                                }
+                                if (type == 3) {
+                                    DrivePage.clearedDrive = true;
+                                    v.stopButton(v.findViewById(R.id.stopDriving));
+                                }
+                                Marker m2 = ((Marker) DrivePage.remainingMarkers.peek()[0]);
+                                if ((int) DrivePage.remainingMarkers.peek()[1] == 0) {
+                                    m2.setIcon(getDrawable(R.drawable.next_point));
+                                    m2.setTitle(getString(R.string.nCPTitle));
+                                    m2.setSubDescription(getString(R.string.nCPDesc));
+                                }
+                            }
+                        }
                         if (HomePage.records.containsKey(location)) {
                             if (HomePage.records.get(location) < speed) {
                                 toAdd = true;
@@ -163,7 +232,7 @@ public class DriveModeService extends Service {
                         Notification notification =
                                 new Notification.Builder(v, newR ? "newRoad" : "pb")
                                         .setContentTitle(newR ? getText(R.string.newRoadHeader) : getText(R.string.newRecord))
-                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                        .setSmallIcon(R.mipmap.ic_launcher_foreground)
                                         .setStyle(new Notification.BigTextStyle().bigText(newR ? getText(R.string.newRoadTxt).toString().replace("$$", location) : getText(R.string.newRecordText).toString().replace("%%", String.valueOf(speed)).replace("!!", location)))
                                         .build();
                         NotificationManagerCompat.from(v).notify(newR ? (int) (Math.random() * 100000) : location.hashCode(), notification);

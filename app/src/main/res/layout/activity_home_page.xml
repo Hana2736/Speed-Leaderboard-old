@@ -32,7 +32,21 @@
             android:text="@string/notSetTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/notSetBtn"
-            app:layout_constraintTop_toBottomOf="@+id/driveButton" android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="notSetBtn"/>
+            android:onClick="notSetBtn" app:layout_constraintTop_toBottomOf="@+id/tTrialsBtn"
+            android:layout_marginTop="24dp"/>
+    <Button
+            android:text="@string/createTTBtnLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/createTTrialBtn"
+            app:layout_constraintTop_toBottomOf="@+id/driveButton"
+            android:layout_marginTop="24dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:enabled="false" android:onClick="createTTrial"/>
+    <Button
+            android:text="@string/tTrialBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tTrialsBtn"
+            app:layout_constraintTop_toBottomOf="@+id/createTTrialBtn" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="24dp" android:enabled="false"
+            android:onClick="seeTTrials"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

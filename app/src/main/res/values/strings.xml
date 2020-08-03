@@ -18,7 +18,9 @@
     </string>
     <string name="loggingIn">Reading data, hang on just a moment…</string>
     <string name="driveButtonLabel">Let\'s drive!</string>
-    <string name="leaderboardButtonLabel">Look at leaderboards</string>
+    <string name="leaderboardButtonLabel">Speed leaderboard</string>
+    <string name="createTTBtnLabel">Create Time Trial</string>
+    <string name="tTrialBtn">View Time Trials</string>
     <string name="stopDriveButtonWarn">Please choose the \"Save results and exit\" button instead.</string>
     <string name="locationPermissionRequired">The app needs location access to get your street and speed.</string>
     <string name="bgLocationPermission">The app needs location at all times so it can work while you have other apps
@@ -31,7 +33,7 @@
     </string>
     <string name="newRecord">New Personal Record!</string>
     <string name="newRecordText">You set a new highest speed of %%MPH on\n!!!</string>
-    <string name="backgroundCrash">The service was stopped because you or your system closed the app.\nAny unsubmitted
+    <string name="backgroundCrash">The service was stopped because you or your system closed the app.\nAny unsaved
         records were lost.
     </string>
     <string name="bgBannerCrash">Service stopped!</string>
@@ -41,19 +43,46 @@
     <string name="roadsDiscovered">New records this session: 0</string>
     <string name="speedMenu">Your speed: $$MPH</string>
     <string name="stopDriving">Save results and exit</string>
-    <string name="uploading">Your records are being processed…\nPlease stay on this page.</string>
+    <string name="uploading">Saving…\nPlease stay on this page.</string>
     <string name="bgCat">Background Service</string>
     <string name="recordCat">Personal Best</string>
     <string name="defeatCat">Record Defeated</string>
     <string name="crashCat">Driving Mode Errors</string>
-    <string name="newRoadCat">New Road Discoveries</string>
-    <string name="newRoadHeader">New Road Discovered!</string>
-    <string name="newRoadTxt">You just discovered $$.</string>
+    <string name="newRoadCat">New Roads</string>
+    <string name="newRoadHeader">New Road!</string>
+    <string name="newRoadTxt">You just drove on $$ for the first time.</string>
     <string name="notSetTxt">Notification Settings</string>
     <string name="title_activity_leaderboard_page">LeaderboardPage</string>
     <string name="uploadETA">About &lt;Calculating&gt; seconds remaining</string>
     <string name="corruptServerMsg">Received corrupt data from the server!</string>
     <string name="allData">See all results</string>
     <string name="lBoardTitle">Leaderboard</string>
-    <string name="saved">Saved records!</string>
+    <string name="saved">Saved speed records!</string>
+    <string name="startPointDesc">Drive here in time trial mode to start the clock.</string>
+    <string name="startPointTitle">Start Point</string>
+    <string name="fCPTitle">Future Checkpoint</string>
+    <string name="fCPDesc">You\'ll have to pass through here in the time trial.</string>
+    <string name="nCPTitle">Next Point</string>
+    <string name="nCPDesc">You need to go here next! Put your phone down!</string>
+    <string name="finishPointTitle">Finish Point</string>
+    <string name="finishPointDesc">Drive here to end the time trial.</string>
+    <string name="followBtn">Map follow</string>
+    <string name="osmCred">Map data from OpenStreetMap</string>
+    <string name="tTrialGo">Start Time Trial</string>
+    <string name="tTrialLB">Leaderboard</string>
+    <string name="tTrialName">%% by $$</string>
+    <string name="getToStart">Get to the starting point to begin</string>
+    <string name="pinInfo">Tap a marker to see what it means</string>
+    <string name="markerRmn">%%/$$ checkpoints remaining</string>
+    <string name="timeElapsed">Time: 0:00</string>
+    <string name="notLongTtrial">Your time trial couldn\'t be saved because it needs to have at least 4 markers.
+    </string>
+    <string name="finishing">Finishing up…</string>
+    <string name="savedTTrial">Saved your time trial! Go check it out!</string>
+    <string name="savedTTrialRun">You beat your best time! Check the leaderboard!</string>
+    <string name="failedTTrialRun">Time trial run failed. Better luck next time!</string>
+    <string name="guBtn">Give up…</string>
+    <string name="foroforerror">There\'s nothing here!</string>
+    <string name="nameTrial">Please name your time trial</string>
+    <string name="OK">OK</string>
 </resources>

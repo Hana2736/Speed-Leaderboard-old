@@ -1,12 +1,19 @@
 package dev.stickbit.speed;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import com.android.volley.ClientError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -17,12 +24,15 @@ import java.util.*;
 public class HandleRequest {
     public static RequestQueue q = null;
     static Snackbar s = null;
+
     public static void requestGeneric(Activity a, String url, String mode, Object extra) {
         if (mode.equals("pullAll")) {
-            s = Snackbar.make(a.findViewById(R.id.leaderboardHeader).getRootView(), R.string.loggingIn, Snackbar.LENGTH_INDEFINITE);
-            s.show();
             LinearLayout l = a.findViewById(R.id.resultLayout);
             l.removeAllViews();
+        }
+        if (mode.equals("pullAll") || mode.equals("getTTrials") || mode.equals("getTTrialSingle")) {
+            s = Snackbar.make(a.findViewById(mode.equals("pullAll") ? R.id.leaderboardHeader : mode.equals("getTTrials") ? R.id.mainCnstLay : R.id.llayoutres).getRootView(), R.string.loggingIn, Snackbar.LENGTH_INDEFINITE);
+            s.show();
         }
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -58,12 +68,24 @@ public class HandleRequest {
                                 h.pullAllResults(a, response, (Integer) extra);
                                 break;
                             }
+                            case "getTTrials": {
+                                h.getTTrials(response, a);
+                                break;
+                            }
+                            case "getTTrialSingle": {
+                                h.pullTTrialResults(response, a, (LinearLayout) extra);
+                                break;
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }, error -> {
-            Snackbar.make(a.getWindow().getDecorView().getRootView(), a.getText(R.string.networkError).toString().replace("%%", String.valueOf(error)), Snackbar.LENGTH_INDEFINITE).show();
+            if (error instanceof ClientError) {
+                Snackbar.make(a.getWindow().getDecorView().getRootView(), R.string.foroforerror, Snackbar.LENGTH_INDEFINITE).show();
+            } else {
+                Snackbar.make(a.getWindow().getDecorView().getRootView(), a.getText(R.string.networkError).toString().replace("%%", String.valueOf(error)), Snackbar.LENGTH_INDEFINITE).show();
+            }
             error.printStackTrace();
         });
         q.add(stringRequest);
@@ -128,8 +150,22 @@ public class HandleRequest {
         l.addView(t);
     }
 
+    static void addTrash2(Activity s, String name, LinearLayout l, double time) {
+        TextView t = new TextView(s);
+        int min = (int) (time / 1000 / 60);
+        int sec = (int) (time / 1000 - (min * 60));
+        String mString = String.valueOf(min);
+        String sString = String.valueOf(sec).length() == 1 ? "0" + sec : String.valueOf(sec);
+        t.setText(name + ": " + mString + ":" + sString);
+        l.addView(t);
+        t = new TextView(s);
+        t.setText(" ");
+        l.addView(t);
+    }
+
     private static class netHelper {
         public Snackbar sn = s;
+
         public void getRecords(Activity a, String res, HomePage h) {
             HomePage.records = new HashMap<>();
             String[] split = res.split("\n");
@@ -157,6 +193,87 @@ public class HandleRequest {
         public void getName(String res, HomePage h) {
             HomePage.name = res;
             h.ready();
+
+        }
+
+        public void getTTrials(String res, Activity h) {
+            HomePage.tTrials = new HashMap<>();
+            HomePage.myTTrialTimes = new HashMap<>();
+            String[] split = res.split("\n");
+            for (String s : split) {
+                if (s.contains("~")) {
+                    try {
+                        String[] splitPts = s.split("~");
+                        String title = splitPts[0];
+                        String[] arr = new String[splitPts.length - 1];
+                        for (int i = 1; i < splitPts.length; i++) {
+                            arr[i - 1] = splitPts[i];
+                        }
+                        HomePage.tTrials.put(title, arr);
+                        try {
+                            HomePage.myTTrialTimes.put(title, Double.valueOf(splitPts[splitPts.length - 1]));
+                        } catch (Exception e) {
+                            HomePage.myTTrialTimes.put(title, Double.MAX_VALUE);
+                        }
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+            ConstraintLayout mConstraintLayout = (ConstraintLayout) h.findViewById(R.id.cLao);
+            ConstraintSet set = new ConstraintSet();
+
+            View lastView = null;
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            width = width / 2 - TimeTrialList.dpToPx(12);
+            for (String name : HomePage.tTrials.keySet()) {
+                TextView title = new TextView(h);
+                title.setText(name);
+                title.setTextAppearance(R.style.TextAppearance_AppCompat_Large);
+                title.setGravity(Gravity.CENTER);
+                title.setId(View.generateViewId());
+                mConstraintLayout.addView(title, 0);
+                MaterialButton goBtn = new MaterialButton(h);
+                goBtn.setText(R.string.tTrialGo);
+                goBtn.setId(View.generateViewId());
+                goBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DrivePage.tTrialToLoad = name;
+                        DrivePage.cachedTime = HomePage.myTTrialTimes.get(name);
+                        StarterPage.changeActivities(h, DrivePage.class);
+                    }
+                });
+                mConstraintLayout.addView(goBtn, 0);
+                MaterialButton lbBtn = new MaterialButton(h);
+                lbBtn.setText(R.string.tTrialLB);
+                lbBtn.setId(View.generateViewId());
+                mConstraintLayout.addView(lbBtn, 0);
+                set.clone(mConstraintLayout);
+                set.connect(title.getId(), ConstraintSet.TOP, lastView == null ? mConstraintLayout.getId() : lastView.getId(), lastView == null ? ConstraintSet.TOP : ConstraintSet.BOTTOM, 24);
+                set.connect(title.getId(), ConstraintSet.START, mConstraintLayout.getId(), ConstraintSet.START, 0);
+                set.connect(title.getId(), ConstraintSet.END, mConstraintLayout.getId(), ConstraintSet.END, 0);
+                System.out.println("Width is " + width);
+                goBtn.setWidth(width);
+                goBtn.setMinWidth(width);
+                goBtn.setMaxWidth(width);
+                set.connect(goBtn.getId(), ConstraintSet.TOP, title.getId(), ConstraintSet.BOTTOM, 16);
+                set.connect(goBtn.getId(), ConstraintSet.START, mConstraintLayout.getId(), ConstraintSet.START, 24);
+                lbBtn.setWidth(width);
+                lbBtn.setMinWidth(width);
+                lbBtn.setMaxWidth(width);
+                lbBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SeeTTrialLeaderboard.courseName = title.getText().toString();
+                        StarterPage.changeActivities(h, SeeTTrialLeaderboard.class);
+                    }
+                });
+                set.connect(lbBtn.getId(), ConstraintSet.TOP, title.getId(), ConstraintSet.BOTTOM, 16);
+                set.connect(lbBtn.getId(), ConstraintSet.END, mConstraintLayout.getId(), ConstraintSet.END, 24);
+                lastView = lbBtn;
+                set.applyTo(mConstraintLayout);
+            }
+            sn.dismiss();
         }
 
         public void register(String res, Activity v) {
@@ -224,6 +341,37 @@ public class HandleRequest {
                 sortByName(records, s, l);
             if (mode == 2)
                 sortBySpeed(records, s, l);
+            sn.dismiss();
+        }
+
+        public void pullTTrialResults(String res, Activity a, LinearLayout l) {
+            Map<String, Double> speeds = new HashMap<>();
+            String[] split = res.split("\n");
+            for (String s : split) {
+                if (s.contains("~")) {
+                    try {
+                        String[] splitPts = s.split("~");
+                        speeds.put(splitPts[0], Double.valueOf(splitPts[1]));
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+            List<Object[]> speedsList = new ArrayList<>();
+            List<Object[]> names = new ArrayList<>();
+            int j = 0;
+            for (String name : speeds.keySet()) {
+                names.add(new Object[]{name, j});
+                speedsList.add(new Object[]{speeds.get(name), j});
+            }
+
+            Collections.sort(speedsList, new Comparator<Object[]>() {
+                public int compare(Object[] ints, Object[] otherInts) {
+                    return ((Double) otherInts[0]).compareTo((Double) ints[0]);
+                }
+            });
+            for (Object[] sp : speedsList) {
+                addTrash2(a, names.get((Integer) sp[1])[0].toString(), l, (double) sp[0]);
+            }
             sn.dismiss();
         }
     }

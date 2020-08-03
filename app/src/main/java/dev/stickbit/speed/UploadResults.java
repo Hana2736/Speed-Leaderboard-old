@@ -22,6 +22,7 @@ public class UploadResults extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DriveModeService.v = null;
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -39,6 +40,28 @@ public class UploadResults extends AppCompatActivity {
             }
 
         }
+        if (DrivePage.tTrialToLoad != null) {
+            if (DrivePage.cachedTime > DrivePage.time && DrivePage.time != 0) {
+                HandleRequest.requestGeneric(this, StarterPage.ipAddr + "SETBESTTIMETRIAL~" + StarterPage.token + "~" + DrivePage.tTrialToLoad + "~" + DrivePage.time + "~", "setRecord", this);
+                HomePage.showSaveMessage = getString(R.string.savedTTrialRun);
+            } else {
+                HomePage.showSaveMessage = getString(R.string.failedTTrialRun);
+            }
+        }
+        if (DrivePage.creatRoute) {
+            if (DrivePage.lats.size() > 3) {
+                HomePage.showSaveMessage = getString(R.string.savedTTrial);
+                String coords = DrivePage.tName + "~";
+                while (!DrivePage.lats.isEmpty()) {
+                    coords += DrivePage.lats.remove() + "," + DrivePage.longs.remove() + "~";
+                }
+                coords = coords.substring(0, coords.length() - 1);
+                goodCount++;
+                HandleRequest.requestGeneric(this, StarterPage.ipAddr + "SAVETTRIAL~" + StarterPage.token + "~" + coords, "setRecord", this);
+            } else {
+                HomePage.showSaveMessage = getString(R.string.notLongTtrial);
+            }
+        }
         new asyncTrash(this).start();
     }
 
@@ -51,9 +74,10 @@ public class UploadResults extends AppCompatActivity {
 
         @Override
         public void run() {
+
             while (keepRun) {
                 try {
-                    Thread.sleep(550);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -68,10 +92,13 @@ public class UploadResults extends AppCompatActivity {
                         }
                         ((ProgressBar) findViewById(R.id.progressBar)).setProgress((int) ((prog) * 100D), true);
                         if (progress == goodCount) {
+                            t.setText(R.string.finishing);
                             keepRun = false;
                             finish();
                             StarterPage.changeActivities(a, StarterPage.class);
-                            HomePage.showSaveMessage = true;
+                            if (HomePage.showSaveMessage == null) {
+                                HomePage.showSaveMessage = getString(R.string.saved);
+                            }
                         }
                     }
                 });

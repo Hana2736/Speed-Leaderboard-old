@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
             android:allowBackup="true"
@@ -13,17 +14,19 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".SeeTTrialLeaderboard">
+        </activity>
+        <activity android:name=".TimeTrialList">
+        </activity>
         <activity android:name=".SeeLeaderboard">
         </activity>
         <activity android:name=".UploadResults">
         </activity>
         <activity
                 android:name=".DrivePage"
-                android:launchMode="singleInstance"
-        >
+                android:launchMode="singleInstance">
         </activity>
-        <activity
-                android:name=".HomePage">
+        <activity android:name=".HomePage">
         </activity>
         <activity android:name=".Register">
         </activity>
