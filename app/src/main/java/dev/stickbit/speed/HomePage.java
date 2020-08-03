@@ -17,9 +17,8 @@ public class HomePage extends AppCompatActivity {
     public static Map<String, Double> myTTrialTimes;
     public static String name;
     public static String league;
-    int ready = 0;
     public static String showSaveMessage;
-
+    int ready = 0;
 
     public void ready() {
         ready++;

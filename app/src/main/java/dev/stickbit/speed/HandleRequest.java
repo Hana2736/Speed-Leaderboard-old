@@ -219,7 +219,7 @@ public class HandleRequest {
                     }
                 }
             }
-            ConstraintLayout mConstraintLayout = (ConstraintLayout) h.findViewById(R.id.cLao);
+            ConstraintLayout mConstraintLayout = h.findViewById(R.id.cLao);
             ConstraintSet set = new ConstraintSet();
 
             View lastView = null;

@@ -20,19 +20,19 @@ public class DriveModeService extends Service {
     public static String location;
     public static DrivePage v = null;
     public static int roadsDiscovered = 0;
+    public double lastLat;
+    public double lastLongi;
     double speedCalc;
     LocationManager l;
     boolean kill;
     trash t;
     HandlerThread th;
-    private Looper serviceLooper;
-    private ServiceHandler serviceHandler;
-    private Location last;
-    public double lastLat;
-    public double lastLongi;
     Location lastPnt;
     boolean hasPlacedBeginPoint;
     Marker lastmarker;
+    private Looper serviceLooper;
+    private ServiceHandler serviceHandler;
+    private Location last;
 
     public void kill() {
         stopForeground(true);
@@ -114,7 +114,7 @@ public class DriveModeService extends Service {
                     if (last == null) {
                         last = l.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     }
-                    if (!v.isTaskRoot() && !v.doneWithIt) {
+                    if (!v.isTaskRoot() && !DrivePage.doneWithIt) {
                         Notification notification =
                                 new Notification.Builder(v, "crash")
                                         .setContentTitle(getText(R.string.bgBannerCrash))
@@ -149,8 +149,8 @@ public class DriveModeService extends Service {
 
 
                     speed = (int) speedCalc;
-                    if(speed > 300){
-                        speed =0;
+                    if (speed > 300) {
+                        speed = 0;
                     }
                     boolean accurate = last.getAccuracy() < 25 && newL.getAccuracy() < 25;
                     last = newL;
@@ -162,7 +162,7 @@ public class DriveModeService extends Service {
                     boolean newR = false;
                     if (accurate) {
                         if (DrivePage.creatRoute) {
-                            if(DrivePage.longs == null){
+                            if (DrivePage.longs == null) {
                                 DrivePage.longs = new LinkedList<>();
                                 DrivePage.lats = new LinkedList<>();
                             }

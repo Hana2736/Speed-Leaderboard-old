@@ -33,20 +33,30 @@ import java.util.Queue;
 
 public class DrivePage extends AppCompatActivity {
     public static DriveModeService s;
-    static boolean doneWithIt = false;
     public static MapView m;
-    MyLocationNewOverlay mover;
     public static String tTrialToLoad;
     public static double cachedTime = Double.MAX_VALUE;
     public static double time = 0;
     public static Queue<Object[]> remainingMarkers;
-    static DrivePage.Timer tim;
-    static int initPts;
     public static boolean clearedDrive = false;
     public static boolean creatRoute = false;
     public static Queue<Double> lats;
     public static Queue<Double> longs;
     public static String tName;
+    static boolean doneWithIt = false;
+    static DrivePage.Timer tim;
+    static int initPts;
+    MyLocationNewOverlay mover;
+
+    public static void removeMarker(Marker m, MapView ma) {
+        ma.getOverlays().remove(m);
+        ma.invalidate();
+    }
+
+    public static void startTimer() {
+        tim = new DrivePage.Timer();
+        tim.start();
+    }
 
     @Override
     public void onBackPressed() {
@@ -212,11 +222,6 @@ public class DrivePage extends AppCompatActivity {
         }
     }
 
-    public static void removeMarker(Marker m, MapView ma) {
-        ma.getOverlays().remove(m);
-        ma.invalidate();
-    }
-
     public Marker addMarker(double lat, double longi, MapView m, int icon) {
         GeoPoint startPoint = new GeoPoint(lat, longi);
         Marker startMarker = new Marker(m);
@@ -267,9 +272,27 @@ public class DrivePage extends AppCompatActivity {
         StarterPage.changeActivities(this, UploadResults.class);
     }
 
-    public static void startTimer() {
-        tim = new DrivePage.Timer();
-        tim.start();
+    private static class Timer extends Thread {
+        public double time = 0;
+        double initTime;
+
+        public Timer() {
+            initTime = System.currentTimeMillis();
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    time = System.currentTimeMillis() - initTime;
+                    Thread.sleep(50);
+                    if (doneWithIt)
+                        return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private class AsyncTrash extends Thread {
@@ -331,29 +354,6 @@ public class DrivePage extends AppCompatActivity {
 
         }
 
-    }
-
-    private static class Timer extends Thread {
-        public double time = 0;
-        double initTime;
-
-        public Timer() {
-            initTime = System.currentTimeMillis();
-        }
-
-        @Override
-        public void run() {
-            try {
-                while (true) {
-                    time = System.currentTimeMillis() - initTime;
-                    Thread.sleep(50);
-                    if (doneWithIt)
-                        return;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private class askPermClickListen implements View.OnClickListener {
