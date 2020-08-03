@@ -14,4 +14,4 @@ An Android app to compete with your friends.
 * Compete against others on trials.
 
 ## Disclosure
-This app uses modified Volley library and Material 2 library.
+This app uses a modified version of the Volley library, as well as the Material 2 and OSMDroid libraries.
