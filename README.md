@@ -11,7 +11,7 @@ An Android app to compete with your friends.
 * Make groups with your friends.
 * View fellow drivers speed within your group.
 * Create time trials
-* Compeate agnist others on trials.
+* Compete against others on trials.
 
 ## Disclosure
 This app uses modified Volley library and Material 2 library.
