@@ -41,7 +41,7 @@
     <Button
             android:text="@string/createTTBtnLabel"
             android:layout_width="0dp"
-            android:layout_height="48dp" android:id="@+id/createTTrialBtn"
+            android:layout_height="wrap_content" android:id="@+id/createTTrialBtn"
             android:enabled="false" android:onClick="createTTrial"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tTrialsBtn" android:layout_marginEnd="8dp"
