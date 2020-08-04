@@ -362,11 +362,12 @@ public class HandleRequest {
             for (String name : speeds.keySet()) {
                 names.add(new Object[]{name, j});
                 speedsList.add(new Object[]{speeds.get(name), j});
+                j++;
             }
 
-            Collections.sort(speedsList, new Comparator<Object[]>() {
+            speedsList.sort(new Comparator<Object[]>() {
                 public int compare(Object[] ints, Object[] otherInts) {
-                    return ((Double) otherInts[0]).compareTo((Double) ints[0]);
+                    return ((Double) ints[0]).compareTo((Double) otherInts[0]);
                 }
             });
             for (Object[] sp : speedsList) {

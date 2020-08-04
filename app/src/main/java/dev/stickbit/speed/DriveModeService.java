@@ -33,6 +33,8 @@ public class DriveModeService extends Service {
     private Looper serviceLooper;
     private ServiceHandler serviceHandler;
     private Location last;
+    int count = 5;
+    Address a;
 
     public void kill() {
         stopForeground(true);
@@ -104,12 +106,12 @@ public class DriveModeService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-
             while (true) {
                 if (kill)
                     return;
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(750);
+                    count++;
                     l.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, t);
                     if (last == null) {
                         last = l.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -127,7 +129,7 @@ public class DriveModeService extends Service {
                     }
                     Location newL = l.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     double dist = 0;
-                    double timeDiff = 250;
+                    double timeDiff = 9999999999999d;
                     try {
                         dist = newL.distanceTo(last);
                         timeDiff = newL.getTime() - last.getTime();
@@ -145,22 +147,30 @@ public class DriveModeService extends Service {
                     //km/hr
                     speedCalc /= 1000d;
                     //mph
-                    speedCalc *= 0.621371192;
+                    speedCalc *= 0.621371192d;
 
 
-                    speed = (int) speedCalc;
-                    if (speed > 300) {
-                        speed = 0;
-                    }
                     boolean accurate = last.getAccuracy() < 25 && newL.getAccuracy() < 25;
                     last = newL;
-                    Geocoder c = new Geocoder(v);
-                    Address a = c.getFromLocation(newL.getLatitude(), newL.getLongitude(), 1).get(0);
-                    location = a.getThoroughfare() + ", " + a.getPostalCode() + ", " + a.getCountryName();
-                    location = location.replaceAll("null", "N/A");
+                    if (count >= 3) {
+                        Geocoder c = new Geocoder(v);
+                        a = c.getFromLocation(newL.getLatitude(), newL.getLongitude(), 1).get(0);
+                        count = 0;
+                    }
+
+                    if (a != null) {
+                        location = a.getThoroughfare() + ", " + a.getPostalCode() + ", " + a.getCountryName();
+                        location = location.replaceAll("null", "N/A");
+                    }
                     boolean toAdd = false;
                     boolean newR = false;
                     if (accurate) {
+                        if (speedCalc < 300) {
+                            speed = (int) speedCalc;
+
+                        } else {
+                            System.out.println("WE ARE GOING WAY TOO FAST");
+                        }
                         if (DrivePage.creatRoute) {
                             if (DrivePage.longs == null) {
                                 DrivePage.longs = new LinkedList<>();
