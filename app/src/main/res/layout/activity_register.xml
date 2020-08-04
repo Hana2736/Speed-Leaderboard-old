@@ -16,7 +16,8 @@
             android:singleLine="true" android:hint="@string/league_name" android:selectAllOnFocus="true"
             android:autofillHints=""
             app:layout_constraintTop_toBottomOf="@+id/usernameField"
-            android:layout_marginTop="24dp" app:layout_constraintStart_toStartOf="@+id/usernameField"/>
+            android:layout_marginTop="24dp" app:layout_constraintStart_toStartOf="@+id/usernameField"
+            android:gravity="center_horizontal"/>
     <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,13 +37,15 @@
             android:id="@+id/usernameField"
             android:singleLine="true" android:hint="@string/username" android:selectAllOnFocus="true"
             app:layout_constraintTop_toBottomOf="@+id/welcomeText" android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp" android:autofillHints=""/>
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp" android:autofillHints=""
+            android:layout_marginEnd="24dp" app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center_horizontal"/>
     <Button
             android:text="@string/register"
             android:layout_width="wrap_content"
             android:layout_height="48dp" android:id="@+id/regButton"
             app:layout_constraintStart_toStartOf="@+id/leagueField"
             app:layout_constraintTop_toBottomOf="@+id/leagueField" android:layout_marginTop="24dp"
-            android:onClick="loginButton"/>
+            android:onClick="loginButton" app:layout_constraintEnd_toEndOf="@+id/leagueField"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

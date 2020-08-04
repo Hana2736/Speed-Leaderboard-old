@@ -16,37 +16,44 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" android:textAlignment="center"/>
     <Button
             android:text="@string/leaderboardButtonLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/statsButton"
-            app:layout_constraintTop_toBottomOf="@+id/wbMessage"
-            android:layout_marginTop="32dp" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:enabled="false" android:onClick="seeLeaderboard"/>
+            android:enabled="false" android:onClick="seeLeaderboard"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/wbMessage"
+            android:layout_marginTop="32dp" android:layout_marginEnd="24dp"
+            app:layout_constraintStart_toEndOf="@+id/driveButton"/>
     <Button
             android:text="@string/driveButtonLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/driveButton"
-            app:layout_constraintTop_toBottomOf="@+id/statsButton"
-            android:layout_marginTop="24dp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:enabled="false" android:onClick="driveButton"/>
+            android:enabled="false" android:onClick="driveButton"
+            app:layout_constraintEnd_toStartOf="@+id/statsButton"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/wbMessage"
+            android:layout_marginTop="32dp" android:layout_marginStart="24dp" android:layout_marginEnd="8dp"/>
     <Button
             android:text="@string/notSetTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/notSetBtn"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="notSetBtn" app:layout_constraintTop_toBottomOf="@+id/tTrialsBtn"
-            android:layout_marginTop="24dp"/>
+            android:onClick="notSetBtn"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="24dp"/>
     <Button
             android:text="@string/createTTBtnLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/createTTrialBtn"
-            app:layout_constraintTop_toBottomOf="@+id/driveButton"
-            android:layout_marginTop="24dp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:enabled="false" android:onClick="createTTrial"/>
+            android:enabled="false" android:onClick="createTTrial"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tTrialsBtn" android:layout_marginEnd="8dp"
+            android:layout_marginStart="24dp" app:layout_constraintTop_toBottomOf="@+id/driveButton"
+            android:layout_marginTop="16dp" app:layout_constraintHorizontal_bias="1.0"/>
     <Button
             android:text="@string/tTrialBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/tTrialsBtn"
-            app:layout_constraintTop_toBottomOf="@+id/createTTrialBtn" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="24dp" android:enabled="false"
-            android:onClick="seeTTrials"/>
+            android:enabled="false"
+            android:onClick="seeTTrials"
+            app:layout_constraintStart_toStartOf="@+id/statsButton"
+            app:layout_constraintEnd_toEndOf="@+id/statsButton" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/statsButton" android:layout_marginTop="16dp"
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>
