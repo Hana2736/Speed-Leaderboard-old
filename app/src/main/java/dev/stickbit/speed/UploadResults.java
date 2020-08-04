@@ -43,6 +43,7 @@ public class UploadResults extends AppCompatActivity {
         if (DrivePage.tTrialToLoad != null) {
             if (DrivePage.cachedTime > DrivePage.time && DrivePage.time != 0) {
                 HandleRequest.requestGeneric(this, StarterPage.ipAddr + "SETBESTTIMETRIAL~" + StarterPage.token + "~" + DrivePage.tTrialToLoad + "~" + DrivePage.time + "~", "setRecord", this);
+                goodCount++;
                 HomePage.showSaveMessage = getString(R.string.savedTTrialRun);
             } else {
                 HomePage.showSaveMessage = getString(R.string.failedTTrialRun);
