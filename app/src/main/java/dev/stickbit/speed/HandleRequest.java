@@ -143,7 +143,12 @@ public class HandleRequest {
 
     static void addTrash(Activity s, String name, Map<String, Map<String, Integer>> records, LinearLayout l, String street, int speed) {
         TextView t = new TextView(s);
-        t.setText(name + ": " + speed + " on " + street.substring(0, street.lastIndexOf(",")));
+        String sname = street;
+        try {
+            sname = street.substring(0, street.lastIndexOf(","));
+        } catch (Exception ignored) {
+        }
+        t.setText(name + ": " + speed + " on " + sname);
         l.addView(t);
         t = new TextView(s);
         t.setText(" ");
