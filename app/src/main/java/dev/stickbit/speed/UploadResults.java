@@ -7,6 +7,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class UploadResults extends AppCompatActivity {
     int progress = 0;
     boolean keepRun = true;
@@ -95,12 +98,17 @@ public class UploadResults extends AppCompatActivity {
                         if (progress == goodCount) {
                             t.setText(R.string.finishing);
                             keepRun = false;
+                            try {
+                                Files.delete(Paths.get(getCacheDir() + "/cachedAttempt"));
+                            } catch (Exception ignored) {
+                            }
                             finish();
                             StarterPage.changeActivities(a, StarterPage.class);
                             if (HomePage.showSaveMessage == null) {
                                 HomePage.showSaveMessage = getString(R.string.saved);
                             }
                         }
+
                     }
                 });
 

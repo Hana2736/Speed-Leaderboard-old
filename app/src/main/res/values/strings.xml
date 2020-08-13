@@ -22,7 +22,10 @@
     <string name="createTTBtnLabel">Create Time Trial</string>
     <string name="tTrialBtn">View Time Trials</string>
     <string name="stopDriveButtonWarn">Please choose the \"Save results and exit\" button instead.</string>
-    <string name="locationPermissionRequired">The app needs location access to get your street and speed.</string>
+    <string name="locationPermissionRequired9">The app needs location access to get your street and speed.</string>
+    <string name="locationpermission10">The app needs location access \"All the time\" in order to get your street and
+        speed.
+    </string>
     <string name="bgLocationPermission">The app needs location at all times so it can work while you have other apps
         open.
     </string>
@@ -33,9 +36,10 @@
     </string>
     <string name="newRecord">New Personal Record!</string>
     <string name="newRecordText">You set a new highest speed of %%MPH on\n!!!</string>
-    <string name="backgroundCrash">The service was stopped because you or your system closed the app.\nAny unsaved
-        records were lost.
+    <string name="backgroundCrash">Driving mode was exited because the app was closed. Time trials will be lost, but
+        speed records will be saved next time you save &amp; quit in driving mode.
     </string>
+    <string name="cacheFail">Something went really wrong. Try clearing the app cache…</string>
     <string name="bgBannerCrash">Service stopped!</string>
     <string name="useNotif">Please use the notification to return to Driving Mode.</string>
     <string name="loadingDrive">Preparing Driving Mode…</string>
@@ -85,4 +89,8 @@
     <string name="foroforerror">There\'s nothing here!</string>
     <string name="nameTrial">Please name your time trial</string>
     <string name="OK">OK</string>
+    <string name="saveFailedBad">Failed to save. Check your connection. Unsaved data was lost…</string>
+    <string name="saveFailedCache">Failed to save. Restart the app, return to driving mode and then save and exit
+        again.
+    </string>
 </resources>

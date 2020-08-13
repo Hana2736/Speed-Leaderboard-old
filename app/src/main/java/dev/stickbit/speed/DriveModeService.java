@@ -10,8 +10,12 @@ import android.os.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
+import com.google.android.material.snackbar.Snackbar;
 import org.osmdroid.views.overlay.Marker;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 
 public class DriveModeService extends Service {
@@ -246,6 +250,15 @@ public class DriveModeService extends Service {
                                         .setStyle(new Notification.BigTextStyle().bigText(newR ? getText(R.string.newRoadTxt).toString().replace("$$", location) : getText(R.string.newRecordText).toString().replace("%%", String.valueOf(speed)).replace("!!", location)))
                                         .build();
                         NotificationManagerCompat.from(v).notify(newR ? (int) (Math.random() * 100000) : location.hashCode(), notification);
+                        try {
+                            FileOutputStream outStream = new FileOutputStream(String.valueOf(Paths.get(getCacheDir() + "/cachedAttempt")));
+                            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outStream);
+                            objectOutputStream.writeObject(HomePage.records);
+                            outStream.close();
+                            objectOutputStream.close();
+                        } catch (Exception e) {
+                            Snackbar.make(v.getWindow().getDecorView().getRootView(), R.string.cacheFail, Snackbar.LENGTH_INDEFINITE).show();
+                        }
                     }
 
 

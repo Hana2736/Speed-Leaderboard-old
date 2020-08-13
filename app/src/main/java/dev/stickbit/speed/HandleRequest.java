@@ -84,7 +84,17 @@ public class HandleRequest {
             if (error instanceof ClientError) {
                 Snackbar.make(a.getWindow().getDecorView().getRootView(), R.string.foroforerror, Snackbar.LENGTH_INDEFINITE).show();
             } else {
-                Snackbar.make(a.getWindow().getDecorView().getRootView(), a.getText(R.string.networkError).toString().replace("%%", String.valueOf(error)), Snackbar.LENGTH_INDEFINITE).show();
+                String text;
+                if (mode.equals("setRecord")) {
+                    if (!(url.startsWith(StarterPage.ipAddr + "SETBESTTIMETRIAL") || url.startsWith(StarterPage.ipAddr + "SAVETTRIAL"))) {
+                        text = a.getString(R.string.saveFailedCache);
+                    } else {
+                        text = a.getString(R.string.saveFailedBad);
+                    }
+                } else {
+                    text = a.getString(R.string.networkError).replace("%%", error.toString());
+                }
+                Snackbar.make(a.getWindow().getDecorView().getRootView(), text, Snackbar.LENGTH_INDEFINITE).show();
             }
             error.printStackTrace();
         });

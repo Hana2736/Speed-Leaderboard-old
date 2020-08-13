@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -25,10 +26,13 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 public class DrivePage extends AppCompatActivity {
@@ -87,6 +91,19 @@ public class DrivePage extends AppCompatActivity {
             }
         }
 
+        if (Files.exists(Paths.get(getCacheDir() + "/cachedAttempt"))) {
+            try {
+                FileInputStream inputStream = new FileInputStream(String.valueOf(Paths.get(getCacheDir() + "/cachedAttempt")));
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                HomePage.records = (Map<String, Integer>) objectInputStream.readObject();
+                inputStream.close();
+                objectInputStream.close();
+                Files.delete(Paths.get(getCacheDir() + "/cachedAttempt"));
+            } catch (Exception e) {
+                Snackbar.make(getWindow().getDecorView().getRootView(), R.string.cacheFail, Snackbar.LENGTH_INDEFINITE).show();
+            }
+        }
+
         ((Switch) findViewById(R.id.followSwitch)).setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 mover.enableFollowLocation();
@@ -106,9 +123,15 @@ public class DrivePage extends AppCompatActivity {
 
 
         boolean ready = true;
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            Snackbar s = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.locationPermissionRequired, Snackbar.LENGTH_INDEFINITE);
-            s.setAction(R.string.grantButton, new askPermClickListen(0));
+        if (ContextCompat.checkSelfPermission(this, Build.VERSION.SDK_INT != 28 ? Manifest.permission.ACCESS_BACKGROUND_LOCATION : Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            Snackbar s;
+            if (Build.VERSION.SDK_INT == 28) {
+                s = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.locationPermissionRequired9, Snackbar.LENGTH_INDEFINITE);
+                s.setAction(R.string.grantButton, new askPermClickListen(1));
+            } else {
+                s = Snackbar.make(getWindow().getDecorView().getRootView(), R.string.locationpermission10, Snackbar.LENGTH_INDEFINITE);
+                s.setAction(R.string.grantButton, new askPermClickListen(0));
+            }
             s.show();
             findViewById(R.id.driveMap).setVisibility(View.INVISIBLE);
             ready = false;
@@ -365,7 +388,12 @@ public class DrivePage extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, (int) (Math.random() * 99999));
+            if (perm == 1) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, (int) (Math.random() * 99999));
+
+            } else
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, (int) (Math.random() * 99999));
+
         }
     }
 
