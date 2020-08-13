@@ -16,9 +16,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class HandleRequest {
@@ -49,11 +46,19 @@ public class HandleRequest {
                                 break;
                             }
                             case "getLeague": {
-                                h.getLeague(response, (HomePage) extra);
+                                if (extra instanceof HomePage) {
+                                    h.getLeague(response, extra);
+                                } else {
+                                    h.getLeague(response, extra);
+                                }
                                 break;
                             }
                             case "getName": {
-                                h.getName(response, (HomePage) extra);
+                                if (extra instanceof HomePage) {
+                                    h.getName(response, extra);
+                                } else {
+                                    h.getName(response, extra);
+                                }
                                 break;
                             }
                             case "register": {
@@ -200,14 +205,23 @@ public class HandleRequest {
             h.ready();
         }
 
-        public void getLeague(String res, HomePage h) {
-            HomePage.league = res;
-            h.ready();
+        public void getLeague(String res, Object h) {
+            if (h instanceof HomePage) {
+                HomePage.league = res;
+                ((HomePage) h).ready();
+            } else {
+                SwitchUserActivity.groupNames.put((Integer) h, res);
+            }
         }
 
-        public void getName(String res, HomePage h) {
-            HomePage.name = res;
-            h.ready();
+        public void getName(String res, Object h) {
+            if (h instanceof HomePage) {
+                HomePage.name = res;
+                ((HomePage) h).ready();
+            } else {
+                SwitchUserActivity.userNames.put((Integer) h, res);
+            }
+
 
         }
 
@@ -303,15 +317,17 @@ public class HandleRequest {
                 Snackbar.make(v.getWindow().getDecorView().getRootView(), R.string.nameInUse, Snackbar.LENGTH_INDEFINITE).show();
                 return;
             }
-            try {
-                Files.write(Paths.get(v.getFilesDir() + "/token"), res.getBytes());
-                Snackbar.make(v.getWindow().getDecorView().getRootView(), R.string.registered, Snackbar.LENGTH_SHORT).show();
-                StarterPage.changeActivities(v, StarterPage.class);
-            } catch (IOException e) {
-                Snackbar.make(v.getWindow().getDecorView().getRootView(), v.getText(R.string.genericError).toString().replace("%%", e.toString()), Snackbar.LENGTH_INDEFINITE).show();
-                e.printStackTrace();
+
+            if (StarterPage.tokens == null) {
+                StarterPage.tokens = new ArrayList<>();
+                HomePage.objToFile("0", v.getFilesDir() + "/mainToken", v);
             }
+            StarterPage.tokens.add(res);
+            HomePage.objToFile(StarterPage.tokens, v.getFilesDir() + "/tokens", v);
+            Snackbar.make(v.getWindow().getDecorView().getRootView(), R.string.registered, Snackbar.LENGTH_SHORT).show();
+            StarterPage.changeActivities(v, StarterPage.class);
         }
+
 
         public void setRecord(UploadResults resP) {
             resP.progress++;

@@ -27,7 +27,7 @@ import java.util.List;
 public class StarterPage extends AppCompatActivity {
     public static String token;
     public static String ipAddr = "https://mario.stickbit.dev:8448/~";
-
+    public static List<String> tokens;
     public static void changeActivities(Activity co, Class cl) {
         Intent i = new Intent(co, cl);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -70,9 +70,9 @@ public class StarterPage extends AppCompatActivity {
         }
 
         try {
-            if (Files.exists(Paths.get(getFilesDir() + "/token"))) {
-                token = Files.readAllLines(Paths.get(getFilesDir() + "/token")).get(0);
-                System.out.println(token);
+            if (Files.exists(Paths.get(getFilesDir() + "/tokens"))) {
+                tokens = (List<String>) HomePage.fileToObj(getFilesDir() + "/tokens", this);
+                token = tokens.get(Integer.parseInt((String) HomePage.fileToObj(getFilesDir() + "/mainToken",this)));
                 if (DriveModeService.v == null) {
                     changeActivities(this, HomePage.class);
                 } else {

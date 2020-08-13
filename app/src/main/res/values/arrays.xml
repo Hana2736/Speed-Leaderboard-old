@@ -5,4 +5,7 @@
         <item>Sort by speed</item>
         <item>Sort by road</item>
     </string-array>
+    <string-array name="loadingSpinner">
+        <item>Reading data, hang on just a moment…</item>
+    </string-array>
 </resources>

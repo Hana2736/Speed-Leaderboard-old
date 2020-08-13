@@ -35,8 +35,10 @@ public class UploadResults extends AppCompatActivity {
         for (String road : HomePage.records.keySet()) {
             try {
                 if (!HomePage.records.get(road).equals(HomePage.oldRecords.get(road))) {
-                    goodCount++;
-                    HandleRequest.requestGeneric(this, StarterPage.ipAddr + "SETRECORD~" + StarterPage.token + "~" + road + "~" + HomePage.records.get(road) + "~", "setRecord", this);
+                    for (String tkn : StarterPage.tokens) {
+                        goodCount++;
+                        HandleRequest.requestGeneric(this, StarterPage.ipAddr + "SETRECORD~" + tkn + "~" + road + "~" + HomePage.records.get(road) + "~", "setRecord", this);
+                    }
                 }
             } catch (Exception e) {
                 //lol

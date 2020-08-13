@@ -8,7 +8,7 @@
         tools:context=".HomePage">
     <TextView
             android:text="@string/loggingIn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/wbMessage"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="24dp"
@@ -32,13 +32,6 @@
             android:layout_marginTop="32dp" android:layout_marginStart="24dp" android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/statsButton"/>
     <Button
-            android:text="@string/notSetTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/notSetBtn"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="notSetBtn"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="24dp"/>
-    <Button
             android:text="@string/createTTBtnLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/createTTrialBtn"
@@ -47,6 +40,16 @@
             app:layout_constraintEnd_toStartOf="@+id/tTrialsBtn" android:layout_marginEnd="8dp"
             android:layout_marginStart="24dp" app:layout_constraintTop_toBottomOf="@+id/driveButton"
             android:layout_marginTop="16dp" app:layout_constraintHorizontal_bias="1.0"/>
+    <Button
+            android:text="@string/notSetTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/notSetBtn"
+            android:onClick="notSetBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tTrialsBtn" android:layout_marginEnd="8dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintHorizontal_bias="1.0" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="36dp" android:enabled="true"/>
     <Button
             android:text="@string/tTrialBtn"
             android:layout_width="0dp"
@@ -57,4 +60,13 @@
             app:layout_constraintEnd_toEndOf="@+id/statsButton" app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintTop_toBottomOf="@+id/statsButton" android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/createTTrialBtn"/>
+    <Button
+            android:text="@string/sudoButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp" android:id="@+id/suButton"
+            android:onClick="sudoMode"
+            app:layout_constraintStart_toStartOf="@+id/statsButton"
+            app:layout_constraintEnd_toEndOf="@+id/statsButton" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="@+id/notSetBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/notSetBtn" android:enabled="true"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

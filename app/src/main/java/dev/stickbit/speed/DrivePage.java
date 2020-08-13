@@ -26,9 +26,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedList;
@@ -93,15 +91,9 @@ public class DrivePage extends AppCompatActivity {
 
         if (Files.exists(Paths.get(getCacheDir() + "/cachedAttempt"))) {
             try {
-                FileInputStream inputStream = new FileInputStream(String.valueOf(Paths.get(getCacheDir() + "/cachedAttempt")));
-                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                HomePage.records = (Map<String, Integer>) objectInputStream.readObject();
-                inputStream.close();
-                objectInputStream.close();
+                HomePage.records = (Map<String, Integer>) HomePage.fileToObj(getCacheDir() + "/cachedAttempt", this);
                 Files.delete(Paths.get(getCacheDir() + "/cachedAttempt"));
-            } catch (Exception e) {
-                Snackbar.make(getWindow().getDecorView().getRootView(), R.string.cacheFail, Snackbar.LENGTH_INDEFINITE).show();
-            }
+            } catch (Exception ignored) { }
         }
 
         ((Switch) findViewById(R.id.followSwitch)).setOnCheckedChangeListener((compoundButton, b) -> {

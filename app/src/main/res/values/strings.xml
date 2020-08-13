@@ -93,4 +93,9 @@
     <string name="saveFailedCache">Failed to save. Restart the app, return to driving mode and then save and exit
         again.
     </string>
+    <string name="sudoButton">Switch users</string>
+    <string name="sudoDetail">Switching your user will show the leaderboards and time trials from the selected user.
+        Speed records will automatically be saved to all of your users.
+    </string>
+    <string name="regBtn">Register a new user</string>
 </resources>

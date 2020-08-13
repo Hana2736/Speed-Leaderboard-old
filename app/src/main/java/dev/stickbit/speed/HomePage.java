@@ -1,5 +1,6 @@
 package dev.stickbit.speed;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -8,6 +9,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class HomePage extends AppCompatActivity {
@@ -107,6 +113,35 @@ public class HomePage extends AppCompatActivity {
     public void createTTrial(View v) {
         DrivePage.creatRoute = true;
         StarterPage.changeActivities(this, DrivePage.class);
+    }
+    public void sudoMode(View v){
+        StarterPage.changeActivities(this, SwitchUserActivity.class);
+    }
+
+    public static void objToFile(Object o, String path, Activity a) {
+        try {
+            FileOutputStream outStream = new FileOutputStream(String.valueOf(Paths.get(path)));
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outStream);
+            objectOutputStream.writeObject(o);
+            outStream.close();
+            objectOutputStream.close();
+        } catch (Exception e) {
+            Snackbar.make(a.getWindow().getDecorView().getRootView(), R.string.cacheFail, Snackbar.LENGTH_INDEFINITE).show();
+        }
+    }
+
+    public static Object fileToObj(String path, Activity a) {
+        Object o = null;
+        try {
+            FileInputStream inputStream = new FileInputStream(String.valueOf(Paths.get(path)));
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+            o = objectInputStream.readObject();
+            inputStream.close();
+            objectInputStream.close();
+        } catch (Exception e) {
+            Snackbar.make(a.getWindow().getDecorView().getRootView(), R.string.cacheFail, Snackbar.LENGTH_INDEFINITE).show();
+        }
+        return o;
     }
 
 }

@@ -250,15 +250,7 @@ public class DriveModeService extends Service {
                                         .setStyle(new Notification.BigTextStyle().bigText(newR ? getText(R.string.newRoadTxt).toString().replace("$$", location) : getText(R.string.newRecordText).toString().replace("%%", String.valueOf(speed)).replace("!!", location)))
                                         .build();
                         NotificationManagerCompat.from(v).notify(newR ? (int) (Math.random() * 100000) : location.hashCode(), notification);
-                        try {
-                            FileOutputStream outStream = new FileOutputStream(String.valueOf(Paths.get(getCacheDir() + "/cachedAttempt")));
-                            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outStream);
-                            objectOutputStream.writeObject(HomePage.records);
-                            outStream.close();
-                            objectOutputStream.close();
-                        } catch (Exception e) {
-                            Snackbar.make(v.getWindow().getDecorView().getRootView(), R.string.cacheFail, Snackbar.LENGTH_INDEFINITE).show();
-                        }
+                        HomePage.objToFile(HomePage.records,v.getCacheDir()+"/cachedAttempt",v);
                     }
 
 
