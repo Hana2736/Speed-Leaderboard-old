@@ -18,6 +18,7 @@ public class SwitchUserActivity extends AppCompatActivity {
     public static HashMap<Integer, String> groupNames;
     public static HashMap<Integer, String> uIDToToken;
     public static HashMap<String, Integer> resToUID;
+    private boolean pageReady=false;
 
     @Override
     public void onBackPressed() {
@@ -52,12 +53,16 @@ public class SwitchUserActivity extends AppCompatActivity {
                 if (!((TextView) view).getText().toString().equals("Current user") && adapterView.isEnabled()) {
                     HomePage.objToFile(String.valueOf(StarterPage.tokens.indexOf(uIDToToken.get(resToUID.get(((TextView) view).getText().toString())))), getFilesDir() + "/mainToken", (Activity) view.getContext());
                 }
+                /*if(pageReady){
+                HomePage.showSaveMessage = null;
+                StarterPage.changeActivities(SwitchUserActivity.this, StarterPage.class);}*/
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
+
         });
     }
 
@@ -90,21 +95,24 @@ public class SwitchUserActivity extends AppCompatActivity {
                 if (userNames.size() == StarterPage.tokens.size() && groupNames.size() == StarterPage.tokens.size()) {
                     System.out.println("gforjoighjowiWOOHOO");
                     List<String> cleanNames = new ArrayList<>();
-                    cleanNames.add("Current user");
+                    //cleanNames.add("Current user");
                     for (int uuid : userNames.keySet()) {
                         String s = userNames.get(uuid) + " in group " + groupNames.get(uuid);
-                        if (!s.equals(HomePage.name + " in group " + HomePage.league)) {
+
                             cleanNames.add(s);
-                        }
+
                         resToUID.put(s, uuid);
                     }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(a, android.R.layout.simple_dropdown_item_1line, cleanNames);
-                            ((Spinner) findViewById(R.id.userList)).setAdapter(adapter);
-                            findViewById(R.id.userList).setEnabled(true);
+                    runOnUiThread(() -> {
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(a, android.R.layout.simple_dropdown_item_1line, cleanNames);
+                        ((Spinner) findViewById(R.id.userList)).setAdapter(adapter);
+                        findViewById(R.id.userList).setEnabled(true);
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+                        pageReady = true;
                     });
                     return;
                 }

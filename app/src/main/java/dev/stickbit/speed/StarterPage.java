@@ -26,7 +26,7 @@ import java.util.List;
 
 public class StarterPage extends AppCompatActivity {
     public static String token;
-    public static String ipAddr = "https://mario.stickbit.dev:8448/~";
+    public static String ipAddr = "https://speed.travisgenzer.com/~";
     public static List<String> tokens;
     public static void changeActivities(Activity co, Class cl) {
         Intent i = new Intent(co, cl);
