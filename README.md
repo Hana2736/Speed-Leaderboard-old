@@ -4,7 +4,7 @@
 
 An Android app to compete with your friends.
 
-[![Google Play](https://www.freepnglogos.com/uploads/itunes-logo/google-play-itunes-png-logo-4.png)](https://play.google.com/store/apps/details?id=)
+[![Google Play](https://www.freepnglogos.com/uploads/itunes-logo/google-play-itunes-png-logo-4.png)](https://play.google.com/store/apps/details?id=dev.stickbit.speed)
 
 ## Features
 * Record highest driving speed.
